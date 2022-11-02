@@ -1,0 +1,42 @@
+All_category
+use mydb;
+SELECT pc.product_id ,c.*  FROM product_category pc
+JOIN category c
+ON pc.category_id = c.id
+WHERE product_id = 5
+ 
+Info_product
+use mydb;
+SELECT p.*, bd_cat.category_id as main_category, bd_cat.name as cat_name, bd_cat.description as description, bd_img.url, bd_img.alt FROM product p
+INNER JOIN (SELECT mc.*, c.name, c.description FROM main_category mc
+JOIN category c
+WHERE mc.category_id = c.id) bd_cat
+ON p.id = bd_cat.product_id
+INNER JOIN (SELECT mi.*, i.url, i.alt FROM main_image mi
+JOIN img i
+ON mi.img_id = i.id) bd_img
+ON p.id = bd_img.product_id
+  
+Other_img
+use mydb;
+SELECT pi.*, i.url, i.alt FROM product_img pi
+JOIN img i
+ON pi.img_id = i.id
+WHERE pi.product_id = 1
+
+Pagin
+use mydb;
+SELECT p.*, pc.category_id FROM product_category pc
+JOIN product p
+ON pc.product_id = p.id
+WHERE p.status = 1 and category_id = 1
+LIMIT 0, 11
+ 
+Count_product
+use mydb;
+SELECT cat.id, cat.name, COUNT(category_id) as count FROM category cat 
+LEFT JOIN product_category pr
+ON cat.id = pr.category_id
+GROUP BY category_id
+ORDER BY count DESC
+ 
